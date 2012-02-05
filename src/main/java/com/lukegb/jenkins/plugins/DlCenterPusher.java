@@ -109,12 +109,12 @@ public class DlCenterPusher extends Recorder {
         listener.getLogger().println("Username: " + getDescriptor().userName());
         
         // we need to set up some basic HTTP things
-        HttpHost proxy = new HttpHost("127.0.0.1", 8888, "http");
+        //HttpHost proxy = new HttpHost("127.0.0.1", 8888, "http");
         
         HttpHost target = new HttpHost(getDescriptor().hostName(), getDescriptor().hostPort(), "http");
         DefaultHttpClient httpClient = new DefaultHttpClient();
         try {
-            httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+            //httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
 
             // here goes: make the HTTP POST request...
             HttpPost addRequest = new HttpPost("/api/1.0/downloads/projects/" + projectSlug + "/artifacts/");
@@ -213,6 +213,10 @@ public class DlCenterPusher extends Recorder {
          * <p>
          * If you don't want fields to be persisted, use <tt>transient</tt>.
          */
+        public DescriptorImpl() {
+            load();
+        }
+        
         private String userName;
         private String password;
         private String hostName;
