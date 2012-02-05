@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <scm>
+        <connection>scm:git:git@github.com:lukegb/dlcenter-push-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:lukegb/dlcenter-push-plugin.git</developerConnection>
+        <url>scm:git:git@github.com:lukegb/dlcenter-push-plugin.git</url>
+  </scm>
+    <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>maven-plugin</artifactId>
+            <version>1.449</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkinsci.plugins</groupId>
+            <artifactId>git</artifactId>
+            <version>1.1.15</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <version>1.449</version><!-- which version of Jenkins is this plugin built against? -->
+  </parent>
+
+  <groupId>com.lukegb.jenkins.plugins</groupId>
+  <artifactId>dlcenter-push-plugin</artifactId>
+  <version>1.0</version>
+  <packaging>hpi</packaging>
+
+  <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
+  <repositories>
+    <repository>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>m.g.o-public</id>
+      <url>http://maven.glassfish.org/content/groups/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>
