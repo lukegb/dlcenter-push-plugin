@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+  <!-- the version of maven's project object model -->
+  <pomVersion>3</pomVersion>
+  
+  <!-- a unique name for this project -->
+  <id>clirr</id>
+  
+  <!-- a short but descriptive name for the project -->
+  <name>Clirr</name>
+  
+  <!-- The version of the project under development, e.g.
+       1.1, 1.2, 2.0-dev -->
+  <currentVersion>0.2-dev</currentVersion>
+  
+  <!-- details about the organization that 'owns' the project -->
+  <organization>
+    <name>Lars Kühne</name>
+    <url>mailto:clirr-devel@lists.sourceforge.net</url>
+<!--    <logo>http://maven.apache.org/images/jakarta-logo-blue.gif</logo> -->
+  </organization>
+  
+  <!-- the year the project started -->
+  <inceptionYear>2003</inceptionYear>
+  <package>net.sf.clirr</package>
+  <logo>/images/clirr.png</logo>
+  <description>
+    Checks Java libraries for binary compatibility with older releases.
+  </description>
+  <!-- a short description of what the project does -->
+  <shortDescription>
+    Clirr is a tool that checks Java libraries for binary
+    compatibility with older releases. Basically you give it two sets
+    of jar files and Clirr dumps out a list of changes in the public
+    api. Clirr provides an Ant task that can be configured to break
+    the build if it detects incompatible api changes. In a continuous
+    integration process Clirr can automatically prevent accidental
+    introduction of binary compatibility problems in Java libraries.
+  </shortDescription>
+
+  <!-- the project home page -->
+  <url>http://clirr.sourceforge.net/</url>
+  <issueTrackingUrl>https://sourceforge.net/tracker/?group_id=89627&amp;atid=590799</issueTrackingUrl>
+  <siteAddress>shell.sourceforge.net</siteAddress>
+<!--
+  <siteDirectory>/home/lk/rmdir</siteDirectory>
+-->
+  <siteDirectory>/home/groups/c/cl/clirr/htdocs/</siteDirectory>
+  <distributionSite>shell.sourceforge.net</distributionSite>
+  <distributionDirectory>/home/groups/c/cl/clirr/htdocs/builds/</distributionDirectory>
+  <!-- the version control repository and http url for online access
+       the connection element has the form:
+       scm:<system>:<system specific connection string> -->
+  <repository>
+    <connection>scm:cvs:pserver:anonymous@cvs.sourceforge.net:/cvsroot/clirr:clirr</connection>
+    <url>http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/clirr</url>
+  </repository>
+
+  <!-- any mailing lists for the project -->
+  <mailingLists>
+    <mailingList>
+      <name>clirr-user</name>
+      <subscribe>http://lists.sourceforge.net/lists/listinfo/clirr-user</subscribe>
+      <unsubscribe>http://lists.sourceforge.net/lists/listinfo/clirr-user</unsubscribe>
+      <archive>http://lists.sourceforge.net/lists/listinfo/clirr-user</archive>
+    </mailingList>
+    <mailingList>
+      <name>clirr-devel</name>
+      <subscribe>http://lists.sourceforge.net/lists/listinfo/clirr-devel</subscribe>
+      <unsubscribe>http://lists.sourceforge.net/lists/listinfo/clirr-devel</unsubscribe>
+      <archive>http://lists.sourceforge.net/lists/listinfo/clirr-devel</archive>
+    </mailingList>
+  </mailingLists>
+  
+  <!-- who the developers are for the project -->
+  <developers>
+      <developer>
+          <name>Lars Kühne</name>
+          <id>lkuehne</id>
+          <!--      <email>lkuehne at users sourceforge net</email> -->
+          <organization>ppi Media</organization>
+          <timezone>+1</timezone>
+          <roles>
+              <role>Java Developer</role>
+              <role>Project Admin</role>
+          </roles>
+      </developer>
+      <developer>
+          <name>Vincent Massol</name>
+          <id>vmassol</id>
+          <email></email>
+          <organization>Apache Software Foundation</organization>
+          <url>http://blogs.codehaus.org/people/vmassol</url>
+          <roles>
+              <role>Initial Inspiration and Feedback</role>
+              <role>Java Developer</role>
+              <role>Maven Guru</role>
+          </roles>
+      </developer>
+
+  </developers>
+
+  <!-- jar files the project is dependent on -->
+  <dependencies>
+    <dependency>
+      <groupId>bcel</groupId>
+      <artifactId>bcel</artifactId>
+      <version>5.1</version>
+      <url>http://jakarta.apache.org/bcel</url>
+    </dependency>
+    <dependency>
+      <groupId>ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>1.5.3-1</version>
+      <url>http://ant.apache.org</url>
+   </dependency>
+  </dependencies>
+  
+  <!-- build information for the project -->
+  <build>
+    <nagEmailAddress>clirr-devel@lists.sourceforge.net</nagEmailAddress>
+    <sourceDirectory>${basedir}/src/java</sourceDirectory>
+    <unitTestSourceDirectory>${basedir}/src/test</unitTestSourceDirectory>
+
+    <unitTest>
+      <includes>
+        <include>**/*Test.java</include>
+      </includes>
+    </unitTest>
+
+    <resources>
+      <resource>
+        <directory>${basedir}/src/conf</directory>
+      </resource>
+    </resources>
+  </build>
+
+  <reports>
+<!--    <report>maven-changelog-plugin</report> -->
+<!--    <report>maven-changes-plugin</report> -->
+    <report>maven-checkstyle-plugin</report>
+<!--    <report>maven-developer-activity-plugin</report> -->
+<!--    <report>maven-file-activity-plugin</report> -->
+    <report>maven-javadoc-plugin</report>
+    <report>maven-jdepend-plugin</report>
+    <report>maven-junit-report-plugin</report>
+    <report>maven-jxr-plugin</report>
+    <report>maven-license-plugin</report>
+<!--    <report>maven-linkcheck-plugin</report> -->
+<!-- we got checkstyle already, so who needs pmd... :-) -->
+    <report>maven-tasklist-plugin</report>
+  </reports>
+
+</project>
+
