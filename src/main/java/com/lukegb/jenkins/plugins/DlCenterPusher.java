@@ -156,9 +156,9 @@ public class DlCenterPusher extends Recorder {
             uploadParameters.add(new BasicNameValuePair("created", build.getTimestampString2().replace('T', ' ').replace("Z", "")));
             uploadParameters.add(new BasicNameValuePair("commit_ref", commitRef));
             uploadParameters.add(new BasicNameValuePair("file_url", newRepoUrl));
-            uploadParameters.add(new BasicNameValuePair("file_size", Long.toString(mvnAr.mainArtifact.getFile(mvnModuleBuild).getTotalSpace())));
+            uploadParameters.add(new BasicNameValuePair("file_size", Long.toString(mvnAr.mainArtifact.getFile(mvnModuleBuild).length())));
             uploadParameters.add(new BasicNameValuePair("file_checksum_md5", mvnAr.mainArtifact.md5sum));
-            uploadParameters.add(new BasicNameValuePair("version", mvnAr.mainArtifact.version));
+            uploadParameters.add(new BasicNameValuePair("version", mvnAr.mainArtifact.version.replace("-SNAPSHOT", "")));
 
             UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(uploadParameters, "UTF-8");
 
