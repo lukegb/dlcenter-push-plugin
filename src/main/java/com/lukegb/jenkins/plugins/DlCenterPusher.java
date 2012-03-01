@@ -84,6 +84,11 @@ public class DlCenterPusher extends Recorder {
     @Override
     public boolean perform(AbstractBuild<?, ?> build, Launcher launcher, BuildListener listener) throws InterruptedException, IOException {
         listener.getLogger().println("!!! I AM RUNNING !!!");
+
+        if (!build.getResult().isBetterOrEqualTo(Result.SUCCESS)) {
+            listener.getLogger().println("The build failed. I'm just going to go cry in a corner.</dlcenterpusher>");
+        }
+        
         List<String> buildText = build.getLog(70); // should be within the last 70 lines.
         String artifactFinalFilename = "FAILURE";
         for (String buildTextLine : buildText) {
@@ -103,6 +108,32 @@ public class DlCenterPusher extends Recorder {
         MavenModuleSetBuild mvnBuild = (MavenModuleSetBuild)build;
         MavenBuild mvnModuleBuild = mvnBuild.getModuleLastBuilds().get(mvnBuild.getParent().getModules().toArray()[0]);
         MavenArtifactRecord mvnAr = mvnModuleBuild.getMavenArtifacts();
+        
+        List listOfUpstreamBuildProjectsAndBuildNumbers = new ArrayList<UpstreamProjectAndBuildNumber>();
+        
+        // list all upstream builds:
+        for (hudson.model.AbstractProject upstreamProject : build.getProject().getUpstreamProjects()) {
+            // neato
+            listener.getLogger().println("Upstream project found: " + upstreamProject.getDisplayName());
+            listener.getLogger().println("It has: " + upstreamProject.getPublishersList().toMap().size() + " publishers registered.");
+            for (Object oupstreamProjectPublisher : upstreamProject.getPublishersList().toMap().values()) {
+                Publisher upstreamProjectPublisher = (Publisher)oupstreamProjectPublisher;
+                listener.getLogger().println(" - " + upstreamProjectPublisher.toString());
+                if (upstreamProjectPublisher.getClass().equals(this.getClass())) {
+                    DlCenterPusher upstreamDlCenterPusher = (DlCenterPusher) upstreamProjectPublisher;
+                    String projectSlug = upstreamDlCenterPusher.getProjectSlug();
+                    int buildNumber = mvnModuleBuild.getUpstreamRelationship(upstreamProject); 
+                    listener.getLogger().println(" - * project slug: " + projectSlug);
+                    listener.getLogger().println(" - * build number was: " + buildNumber);
+                    if (buildNumber == -1 || projectSlug.length() == 0) {
+                        listener.getLogger().println(" - ! nope.");
+                        continue;
+                    }
+                    listOfUpstreamBuildProjectsAndBuildNumbers.add(new UpstreamProjectAndBuildNumber(projectSlug, buildNumber));
+                }
+            }
+        }
+        
         listener.getLogger().println("Pinging dlcenter:");
         listener.getLogger().println("Hostname: " + getDescriptor().hostName());
         listener.getLogger().println("Port: " + getDescriptor().hostPort());
@@ -159,6 +190,12 @@ public class DlCenterPusher extends Recorder {
             uploadParameters.add(new BasicNameValuePair("file_size", Long.toString(mvnAr.mainArtifact.getFile(mvnModuleBuild).length())));
             uploadParameters.add(new BasicNameValuePair("file_checksum_md5", mvnAr.mainArtifact.md5sum));
             uploadParameters.add(new BasicNameValuePair("version", mvnAr.mainArtifact.version.replace("-SNAPSHOT", "")));
+
+            for (Object oupabn : listOfUpstreamBuildProjectsAndBuildNumbers) {
+                UpstreamProjectAndBuildNumber upabn = (UpstreamProjectAndBuildNumber)oupabn;
+
+                uploadParameters.add(new BasicNameValuePair("upstream_artifacts", upabn.getProject() + "!" + upabn.getBuildNumber()));
+            }
 
             UrlEncodedFormEntity uefe = new UrlEncodedFormEntity(uploadParameters, "UTF-8");
 
@@ -288,5 +325,24 @@ public class DlCenterPusher extends Recorder {
         public DlCenterPusher newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             return req.bindJSON(DlCenterPusher.class, formData);
         }
+    }
+    
+    protected class UpstreamProjectAndBuildNumber {
+        private String project = "";
+        private int buildNumber = -1;
+        
+        public UpstreamProjectAndBuildNumber(String newProject, int newBuildNumber) {
+            project = newProject;
+            buildNumber = newBuildNumber;
+        }
+        
+        public String getProject() {
+            return project;
+        }
+        
+        public int getBuildNumber() {
+            return buildNumber;
+        }
+        
     }
 }
