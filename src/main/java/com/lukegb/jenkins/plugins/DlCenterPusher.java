@@ -54,13 +54,17 @@ import java.util.List;
 public class DlCenterPusher extends Recorder {
 
     private final String projectSlug;
-    private final String channelSlug;
+    private final String devChannelSlug;
+    private final String betaChannelSlug;
+    private final String rbChannelSlug;
 
     // Fields in config.jelly must match the parameter names in the "DataBoundConstructor"
     @DataBoundConstructor
-    public DlCenterPusher(String projectSlug, String channelSlug) {
+    public DlCenterPusher(String projectSlug, String devChannelSlug, String betaChannelSlug, String rbChannelSlug) {
         this.projectSlug = projectSlug;
-        this.channelSlug = channelSlug;
+        this.devChannelSlug = devChannelSlug;
+        this.betaChannelSlug = betaChannelSlug;
+        this.rbChannelSlug = rbChannelSlug;
     }
 
     /**
@@ -73,8 +77,14 @@ public class DlCenterPusher extends Recorder {
     /**
      * We'll use this from the <tt>config.jelly</tt>.
      */
-    public String getChannelSlug() {
-        return channelSlug;
+    public String getDevChannelSlug() {
+        return devChannelSlug;
+    }
+    public String getBetaChannelSlug() {
+        return betaChannelSlug;
+    }
+    public String getRbChannelSlug() {
+        return rbChannelSlug;
     }
 
     public BuildStepMonitor getRequiredMonitorService() {
@@ -182,7 +192,7 @@ public class DlCenterPusher extends Recorder {
 
             // gogogo!
             uploadParameters.add(new BasicNameValuePair("project", projectSlug));
-            uploadParameters.add(new BasicNameValuePair("channel", channelSlug));
+            uploadParameters.add(new BasicNameValuePair("channel", getChannelForVersion(mvnAr.mainArtifact.version)));
             uploadParameters.add(new BasicNameValuePair("build_number", Integer.toString(build.getNumber())));
             uploadParameters.add(new BasicNameValuePair("created", build.getTimestampString2().replace('T', ' ').replace("Z", "")));
             uploadParameters.add(new BasicNameValuePair("commit_ref", commitRef));
@@ -221,6 +231,15 @@ public class DlCenterPusher extends Recorder {
         
         
         return true;
+    }
+
+    private String getChannelForVersion(String artifactVersion) {
+        if (artifactVersion.endsWith("-SNAPSHOT"))
+            return devChannelSlug;
+        else if (!artifactVersion.endsWith(".0"))
+            return betaChannelSlug;
+        else
+            return rbChannelSlug;
     }
 
     @Override
