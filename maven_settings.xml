@@ -1,4 +1,4 @@
-ngs>
+<settings>
   <pluginGroups>
     <pluginGroup>org.jenkins-ci.tools</pluginGroup>
   </pluginGroups>
