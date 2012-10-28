@@ -12,7 +12,13 @@
   <f:entry title="Project Slug" field="projectSlug">
     <f:textbox />
   </f:entry>
-  <f:entry title="Channel Slug" field="channelSlug">
+  <f:entry title="DEV Channel Slug" field="devChannelSlug">
+      <f:textbox />
+    </f:entry>
+  <f:entry title="BETA Channel Slug" field="betaChannelSlug">
+      <f:textbox />
+    </f:entry>
+  <f:entry title="RB Channel Slug" field="rbChannelSlug">
       <f:textbox />
     </f:entry>
 </j:jelly>
