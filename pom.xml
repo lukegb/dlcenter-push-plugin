@@ -40,19 +40,4 @@
   <artifactId>dlcenter-push-plugin</artifactId>
   <version>1.3-SNAPSHOT</version>
   <packaging>hpi</packaging>
-
-  <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
-  <repositories>
-    <repository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>m.g.o-public</id>
-      <url>http://maven.glassfish.org/content/groups/public/</url>
-    </pluginRepository>
-  </pluginRepositories>
 </project>
