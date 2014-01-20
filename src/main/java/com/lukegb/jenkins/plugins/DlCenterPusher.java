@@ -215,7 +215,7 @@ public class DlCenterPusher extends Recorder {
             //addRequest.setHeader("Authorization", "Basic " + Base64.encodeBase64String((getDescriptor().userName() + ":" + getDescriptor().password()).getBytes()));
 
             // okay, so:
-            Exception ex = null;
+            IOException ex = null;
             for (int retryCount = 0; retryCount < 3; retryCount++) {
                 listener.getLogger().println("dlcenter <-- upload (retry " + retryCount + ")...");
                 
