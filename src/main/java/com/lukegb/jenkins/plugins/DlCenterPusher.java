@@ -215,12 +215,23 @@ public class DlCenterPusher extends Recorder {
             //addRequest.setHeader("Authorization", "Basic " + Base64.encodeBase64String((getDescriptor().userName() + ":" + getDescriptor().password()).getBytes()));
 
             // okay, so:
-            listener.getLogger().println("dlcenter <-- upload...");
-            HttpResponse resp = httpClient.execute(target, addRequest);
-            HttpEntity returnEntity = resp.getEntity();
-            returnEntity.consumeContent();
-            if (resp.getStatusLine().getStatusCode() != 201) {
-                throw new IOException("Unexpected status code from dlcenter: got " + resp.getStatusLine());
+            Exception ex = null;
+            for (int retryCount = 0; retryCount < 3; retryCount++) {
+                listener.getLogger().println("dlcenter <-- upload (retry " + retryCount + ")...");
+                
+                HttpResponse resp = httpClient.execute(target, addRequest);
+                HttpEntity returnEntity = resp.getEntity();
+                returnEntity.consumeContent();
+                if (resp.getStatusLine().getStatusCode() != 201) {
+                    ex = new IOException("Unexpected status code from dlcenter: got " + resp.getStatusLine());
+                    continue;
+                } else {
+                    ex = null;
+                    break;
+                }
+            }
+            if (ex != null) {
+                throw ex;
             }
             
             listener.getLogger().println("dlcenter --> " + resp.getHeaders("Location")[0].getValue());
