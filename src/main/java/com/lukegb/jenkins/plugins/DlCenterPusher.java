@@ -227,14 +227,13 @@ public class DlCenterPusher extends Recorder {
                     continue;
                 } else {
                     ex = null;
+                    listener.getLogger().println("dlcenter --> " + resp.getHeaders("Location")[0].getValue());
                     break;
                 }
             }
             if (ex != null) {
                 throw ex;
             }
-            
-            listener.getLogger().println("dlcenter --> " + resp.getHeaders("Location")[0].getValue());
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
