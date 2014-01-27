@@ -14,6 +14,8 @@ import net.sf.json.JSONObject;
 import org.apache.commons.net.util.Base64;
 import org.apache.http.*;
 import org.apache.http.auth.*;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -159,6 +161,10 @@ public class DlCenterPusher extends Recorder {
 
             // here goes: make the HTTP POST request...
             HttpPost addRequest = new HttpPost("/api/1.0/downloads/projects/" + projectSlug + "/artifacts/");
+            
+            HttpParams params = new BasicHttpParams();
+            params.setParameter("http.protocol.handle-redirects",false);
+            addRequest.setParams(params);
             
             HttpRequestInterceptor preemptiveAuth = new HttpRequestInterceptor() {
                 public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
