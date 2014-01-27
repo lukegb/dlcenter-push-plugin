@@ -227,7 +227,7 @@ public class DlCenterPusher extends Recorder {
                 
                 HttpResponse resp = httpClient.execute(target, addRequest);
                 HttpEntity returnEntity = resp.getEntity();
-                if (resp.getStatusLine().getStatusCode() != 201) {
+                if (resp.getStatusLine().getStatusCode() != 201 && resp.getStatusLine().getStatusCode() != 400) {
                     listener.getLogger().println("dlcenter ==> " + resp.getStatusLine());
                     returnEntity.writeTo(listener.getLogger());
                     ex = new IOException("Unexpected status code from dlcenter: got " + resp.getStatusLine());
@@ -235,7 +235,10 @@ public class DlCenterPusher extends Recorder {
                 } else {
                     returnEntity.consumeContent();
                     ex = null;
-                    listener.getLogger().println("dlcenter --> " + resp.getHeaders("Location")[0].getValue());
+                    if (resp.getStatusLine().getStatusCode() != 400)
+                        listener.getLogger().println("dlcenter --> " + resp.getHeaders("Location")[0].getValue());
+                    else
+                        listener.getLogger().println("dlcenter --> ???");
                     break;
                 }
             }
