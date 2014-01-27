@@ -223,6 +223,8 @@ public class DlCenterPusher extends Recorder {
                 HttpEntity returnEntity = resp.getEntity();
                 returnEntity.consumeContent();
                 if (resp.getStatusLine().getStatusCode() != 201) {
+                    listener.getLogger().println("dlcenter ==> " + resp.getStatusLine());
+                    returnEntity.writeTo(listener.getLogger());
                     ex = new IOException("Unexpected status code from dlcenter: got " + resp.getStatusLine());
                     continue;
                 } else {
